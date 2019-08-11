@@ -14,72 +14,48 @@
 <body>
         <div id="main-container" class="container" style="background:black">   
                   <div class="row">
-                      <div class="col-xl-3 offset-xl-3">
+                      <div class="col-md-4 offset-4" >
                             <img src="assets/images/hangmanword.jpg" class="img-fluid" alt="Responsive image">
                       </div>
 
                 </div>
                 <div class="row">
-                  <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
-                    Section 1
-                  </div>
-                  <div class="col-md-3" style="text-align: center; background:black; color: white">
+                  <div class="col-md-4 offset-4" style="text-align: center; background:black; color: white">
                     Press any key to get started!
                   </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
-                    Section 1
-                    </div>
-                    <div class="col-md-3" style="text-align: center; background:black; color: white" id="win-tracker-div">
+                    <div class="col-md-4 offset-4" style="text-align: center; background:black; color: white" id="win-tracker-div">
                     Wins: 
                     </div>
                      </div> 
                 <div class="row">
-                  <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
-                    Section 1
-                  </div>
-                  <div class="col-md-3" style="text-align: center; background:black; color: white">
+                  <div class="col-md-4 offset-4" style="text-align: center; background:black; color: white">
                     Current Word
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
-                    Section 1
-                  </div>
-                  <div class="col-md-3" style="text-align: center; background:black; color: white" id="revealed-word-div">
+                  <div class="col-md-4 offset-4" style="text-align: center; background:black; color: white" id="revealed-word-div">
                     
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
-                    Section 1
-                  </div>
-                  <div class="col-md-3" style="text-align: center; background:black; color: white">
+                  <div class="col-md-4 offset-4" style="text-align: center; background:black; color: white">
                     Guesses Remaining
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
-                    Section 1
-                  </div>
-                  <div class="col-md-3" style="text-align: center; background:black; color: white" id="guesses-remaining-div">
+                  <div class="col-md-4 offset-4" style="text-align: center; background:black; color: white" id="guesses-remaining-div">
                     
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
-                    Section 1
-                  </div>
-                  <div class="col-md-3" style="text-align: center; background:black; color: white">
+                  <div class="col-md-4 offset-4" style="text-align: center; background:black; color: white">
                     Letters Already Guessed
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
-                    Section 1
-                  </div>
-                  <div class="col-md-3" style="text-align: center; background:black; color: white" id="letters-guessed-div">
+                  <div class="col-md-4 offset-4" style="text-align: center; background:black; color: white" id="letters-guessed-div">
                     
                   </div>
                 </div>         
@@ -93,7 +69,7 @@
     var current_word;
     var wins = 0;
     var losses = 0;
-    var guesses_remaining = 14;
+    var guesses_remaining;
     var letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
      "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
     var wordpool = ["cowboy", "bandana", "winchester", "magnum", "posse", "justice", "bounty",
@@ -102,16 +78,26 @@
      var word_progress = [];
 
      function intitiateWord() {
+      //  resetting variables
+      $("#letters-guessed-div").html(" ");
+       guessed_letters.length = 0;
+       word_progress = [];
+       guesses_remaining = 14;
+      $("#revealed-word-div").html(" ");
          //  Choose word from pool randomly
       current_word = wordpool[Math.floor(Math.random() * wordpool.length)];
           // populate word_progress variable with proper number of underscores
        for (i=0; i < (current_word.length); i++) {
          word_progress[i] = "_";
-       }
+       
       if (i % 2 == 0) {
         $("#revealed-word-div").append(word_progress[(i / 2)]);
       }
       else $("#revealed-word-div").append(" ");
+       }
+      $("#guesses-remaining-div").html(guesses_remaining);
+      $("#loss-tracker-div").html(losses);
+      $("#win-tracker-div").html("Wins: " + wins);
      }
      
      function processGuess(choice) {
@@ -135,11 +121,8 @@
 
   
 
-     for (guesses_remaining = 14; guesses_remaining > 0;) {
     
     intitiateWord();
-     
-     $("#guesses-remaining-div").html(guesses_remaining);
 
      document.onkeyup = function(event) {
 
@@ -169,10 +152,16 @@
         else {
             // do nothing, invalid input or already guessed
         }
+        if (guesses_remaining==0) {
+          losses++;
+          intitiateWord();
         }
-     }
-        
-        
+        if (!word_progress.includes("_")){
+          wins++;
+          intitiateWord();
+        }
+        }
+
         
 </script>
 
