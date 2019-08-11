@@ -89,7 +89,8 @@
 
 
 <script>
-        
+    
+    var current_word;
     var wins = 0;
     var losses = 0;
     var guesses_remaining = 14;
@@ -100,43 +101,56 @@
      var guessed_letters = [];
      var word_progress = [];
 
+     function intitiateWord() {
+         //  Choose word from pool randomly
+      current_word = wordpool[Math.floor(Math.random() * wordpool.length)];
+          // populate word_progress variable with proper number of underscores
+       for (i=0; i < (current_word.length); i++) {
+         word_progress[i] = "_";
+       }
+       $("#word-revealed-div").html(word_progress);
+     }
+     
      function processGuess(choice) {
 
-         for (i=0; i < (current_word.length * 2); i++) {
+         for (i=0; i < (current_word.length); i++) {
          var n = current_word.indexOf(choice, i);
          word_progress[n] = choice;
          }
 
      }
 
-    //  Choose word from pool randomly
-     var current_word = wordpool[Math.floor(Math.random() * wordpool.length)];
+  
 
 
-    // Fills in div with blanks corresponding to current word
-    for (i=0; i < (current_word.length*2); i++) {
-      if (i % 2 == 0) {
-        $("#revealed-word-div").append("_");
-      }
-      else $("#revealed-word-div").append(" ");
-    }
-
-
-    console.log(current_word);
 
     
+    intitiateWord();
+     
      $("#guesses-remaining-div").html(guesses_remaining);
 
      document.onkeyup = function(event) {
 
         var choice = event.key;
 
-
-        processGuess(choice);
+        console.log(word_progress);
 
         // if valid input + correct guess + not previously guessed
         if (current_word.includes(choice) && letters.includes(choice) && !guessed_letters.includes(choice)){
-            
+          
+          processGuess(choice);
+          guessed_letters.push(choice);
+          
+          for (i=0; i < (current_word.length * 2); i++) {
+      // fills in guessed 
+      if ((i % 2 == 0 && current_word.indexOf(i) == choice)) {
+        $("#revealed-word-div").append(choice);
+      }
+      else if (i % 2 == 0) {
+        $("#revealed-word-div").append(word_progress[(i / 2)]);
+      }
+      else $("#revealed-word-div").append(" ");
+    }
 
         }
         // if valid input + incorrect guess + not previously guessed
