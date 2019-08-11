@@ -1,17 +1,156 @@
 <!DOCTYPE html>
 <html lang="en-us">
 
-<header>
+<head>
     <meta charset="UTF-8">
     <title> Hangman Game</title>
-</header>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+</head>
+
 
 <body>
+        <div id="main-container" class="container" style="background:black">   
+                  <div class="row">
+                      <div class="col-xl-3 offset-xl-3">
+                            <img src="assets/images/hangmanword.jpg" class="img-fluid" alt="Responsive image">
+                      </div>
+
+                </div>
+                <div class="row">
+                  <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
+                    Section 1
+                  </div>
+                  <div class="col-md-3" style="text-align: center; background:black; color: white">
+                    Press any key to get started!
+                  </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
+                    Section 1
+                    </div>
+                    <div class="col-md-3" style="text-align: center; background:black; color: white" id="win-tracker-div">
+                    Wins: 
+                    </div>
+                     </div> 
+                <div class="row">
+                  <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
+                    Section 1
+                  </div>
+                  <div class="col-md-3" style="text-align: center; background:black; color: white">
+                    Current Word
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
+                    Section 1
+                  </div>
+                  <div class="col-md-3" style="text-align: center; background:black; color: white" id="revealed-word-div">
+                    
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
+                    Section 1
+                  </div>
+                  <div class="col-md-3" style="text-align: center; background:black; color: white">
+                    Guesses Remaining
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
+                    Section 1
+                  </div>
+                  <div class="col-md-3" style="text-align: center; background:black; color: white" id="guesses-remaining-div">
+                    
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
+                    Section 1
+                  </div>
+                  <div class="col-md-3" style="text-align: center; background:black; color: white">
+                    Letters Already Guessed
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 offset-md-3" style="text-align: center; background:black; color: white">
+                    Section 1
+                  </div>
+                  <div class="col-md-3" style="text-align: center; background:black; color: white" id="letters-guessed-div">
+                    
+                  </div>
+                </div>         
+              </div>
+
+
+
 
 <script>
         
-        
-        
+    var wins = 0;
+    var losses = 0;
+    var guesses_remaining = 14;
+    var letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
+     "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    var wordpool = ["cowboy", "bandana", "winchester", "magnum", "posse", "justice", "bounty",
+     "saloon", "shootout", "corral", "livestock", "cattle", "railroad", "frontier", "lawman"];
+     var guessed_letters = [];
+     var word_progress = [];
+
+     function processGuess(choice) {
+
+         for (i=0; i < (current_word.length * 2); i++) {
+         var n = current_word.indexOf(choice, i);
+         word_progress[n] = choice;
+         }
+
+     }
+
+    //  Choose word from pool randomly
+     var current_word = wordpool[Math.floor(Math.random() * wordpool.length)];
+
+
+    // Fills in div with blanks corresponding to current word
+    for (i=0; i < (current_word.length*2); i++) {
+      if (i % 2 == 0) {
+        $("#revealed-word-div").append("_");
+      }
+      else $("#revealed-word-div").append(" ");
+    }
+
+
+    console.log(current_word);
+
+    
+     $("#guesses-remaining-div").html(guesses_remaining);
+
+     document.onkeyup = function(event) {
+
+        var choice = event.key;
+
+
+        processGuess(choice);
+
+        // if valid input + correct guess + not previously guessed
+        if (current_word.includes(choice) && letters.includes(choice) && !guessed_letters.includes(choice)){
+            
+
+        }
+        // if valid input + incorrect guess + not previously guessed
+        else if (letters.includes(choice) && !current_word.includes(choice) && !guessed_letters.includes(choice)){
+            guesses_remaining--;
+            $("#letters-guessed-div").append(" " + choice);
+            guessed_letters.push(choice);
+            $("#guesses-remaining-div").html(guesses_remaining);
+        }
+        else {
+            // do nothing, invalid input or already guessed
+        }
+
+     }
         
         
         
