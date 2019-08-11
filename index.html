@@ -108,22 +108,34 @@
        for (i=0; i < (current_word.length); i++) {
          word_progress[i] = "_";
        }
-       $("#word-revealed-div").html(word_progress);
+      if (i % 2 == 0) {
+        $("#revealed-word-div").append(word_progress[(i / 2)]);
+      }
+      else $("#revealed-word-div").append(" ");
      }
      
      function processGuess(choice) {
-
-         for (i=0; i < (current_word.length); i++) {
+       for (i=0; i < (current_word.length); i++) {
          var n = current_word.indexOf(choice, i);
          word_progress[n] = choice;
          }
 
+       for (i=0; i < (current_word.length * 2); i++) {
+      
+      // fills in guessed 
+      if ((i % 2 == 0 && current_word.indexOf(i) == choice)) {
+        $("#revealed-word-div").append(choice);
+      }
+      else if (i % 2 == 0) {
+        $("#revealed-word-div").append(word_progress[(i / 2)]);
+      }
+      else $("#revealed-word-div").append(" ");
+    }
      }
 
   
 
-
-
+     for (guesses_remaining = 14; guesses_remaining > 0;) {
     
     intitiateWord();
      
@@ -138,19 +150,13 @@
         // if valid input + correct guess + not previously guessed
         if (current_word.includes(choice) && letters.includes(choice) && !guessed_letters.includes(choice)){
           
-          processGuess(choice);
-          guessed_letters.push(choice);
+        //  emptys revealed word div prior to replacing
+         $("#revealed-word-div").html(" ");
           
-          for (i=0; i < (current_word.length * 2); i++) {
-      // fills in guessed 
-      if ((i % 2 == 0 && current_word.indexOf(i) == choice)) {
-        $("#revealed-word-div").append(choice);
-      }
-      else if (i % 2 == 0) {
-        $("#revealed-word-div").append(word_progress[(i / 2)]);
-      }
-      else $("#revealed-word-div").append(" ");
-    }
+          processGuess(choice);
+
+          // tracks guessed letters
+          guessed_letters.push(choice);
 
         }
         // if valid input + incorrect guess + not previously guessed
@@ -163,7 +169,7 @@
         else {
             // do nothing, invalid input or already guessed
         }
-
+        }
      }
         
         
